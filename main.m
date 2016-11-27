@@ -7,9 +7,7 @@ load('train_set/train_img_prob.mat');
 labels = Y;
 word_counts_processed = X;
 
-data_blocks = {word_counts_processed, train_cnn_feat, train_color, train_img_prob};
-
-nb_wc = NaiveBayes.fit(word_counts_processed, labels);
+nb_wc = fitcknn(word_counts_processed, labels, 'NumNeighbors', 10);
 nb_wc_out = predict(nb_wc, word_counts_processed);
 nb_wc_acc = 1 / sum(labels ~= nb_wc_out);
 
