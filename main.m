@@ -7,24 +7,24 @@ load('train_set/train_img_prob.mat');
 labels = Y;
 word_counts_processed = X;
 
-nb_wc = fitcknn(word_counts_processed, labels, 'NumNeighbors', 10);
-nb_wc_out = predict(nb_wc, word_counts_processed);
-nb_wc_acc = 1 / sum(labels ~= nb_wc_out);
+wc = fitcknn(word_counts_processed, labels, 'NumNeighbors', 10);
+wc_out = predict(wc, word_counts_processed);
+wc_acc = 1 / sum(labels ~= wc_out);
 
-nb_cnn = NaiveBayes.fit(train_cnn_feat, labels);
-nb_cnn_out = predict(nb_cnn, train_cnn_feat);
-nb_cnn_acc = 1 / sum(labels ~= nb_cnn_out);
+cnn = fitcknn(train_cnn_feat, labels, 'NumNeighbors', 10);
+cnn_out = predict(cnn, train_cnn_feat);
+cnn_acc = 1 / sum(labels ~= cnn_out);
 
-nb_color = NaiveBayes.fit(train_color, labels);
-nb_color_out = predict(nb_color, train_color);
-nb_color_acc = 1 / sum(labels ~= nb_color_out);
+color = fitcknn(train_color, labels,  'NumNeighbors', 10);
+color_out = predict(color, train_color);
+color_acc = 1 / sum(labels ~= color_out);
 
-nb_prob = NaiveBayes.fit(train_img_prob, labels);
-nb_prob_out = predict(nb_prob, train_img_prob);
-nb_prob_acc = 1 / sum(labels ~= nb_prob_out);
+prob = fitcknn(train_img_prob, labels, 'NumNeighbors', 10);
+prob_out = predict(prob, train_img_prob);
+prob_acc = 1 / sum(labels ~= prob_out);
 
-total_acc = nb_wc_acc + nb_cnn_acc + nb_color_acc + nb_prob_acc;
+total_acc = wc_acc + cnn_acc + color_acc + prob_acc;
 
-out = nb_wc_acc * nb_wc_out + nb_cnn_acc * nb_cnn_out + ...
-    nb_color_acc * nb_color_out + nb_prob_acc * nb_prob_out; 
+out = (wc_acc * wc_out + cnn_acc * cnn_out + ...
+    color_acc * color_out + prob_acc * prob_out) / total_acc; 
 out = double(out >= 0.5);
