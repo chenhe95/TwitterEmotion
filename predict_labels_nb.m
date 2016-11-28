@@ -12,5 +12,4 @@ function [Y_hat] = predict_labels_nb(word_counts, cnn_feat, prob_feat, color_fea
 
 n_examples = size(word_counts, 1);
 
-
 end

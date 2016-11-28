@@ -8,6 +8,7 @@ errors = zeros(K, 1);
 cv_10f_indices = crossvalind('Kfold', n_examples, K);
 for i = 1:K
     indices_i = find(cv_10f_indices ~= i);
+    % incorrect needs test data, not train data 
     predictions = predict_labels(word_counts(indices_i, :), cnn_feat(indices_i, :), prob_feat(indices_i, :), color_feat(indices_i, :), raw_imgs(indices_i, :), raw_tweets(indices_i, :));
     errors(i) = sum(predictions ~= labels);
 end
