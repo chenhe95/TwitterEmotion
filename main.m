@@ -57,6 +57,10 @@ for i = 1:K
     wc_model = fitcsvm(word_counts_train, labels_train);
     wc_out = predict(wc_model, word_counts_test);
     wc_acc = 1 / sum(labels_test ~= wc_out);
+    
+%     wc_model = fitcknn(word_counts_train, labels_train, 'NumNeighbors', 20);
+%     wc_out = predict(wc_model, word_counts_test);
+%     wc_acc = 1 / sum(labels_test ~= wc_out);
 
     cnn_model = fitcknn(cnn_feat_train, labels_train, 'NumNeighbors', 5);
     cnn_out = predict(cnn_model, cnn_feat_test);
@@ -76,7 +80,7 @@ for i = 1:K
         color_acc * color_out + prob_acc * prob_out) / total_acc; 
     Y_hat = double(Y_hat >= 0.5);
     
-    errors(i) = sum(Y_hat ~= labels_test);
+    errors(i) = mean(Y_hat ~= labels_test);
 end
 
 error = mean(errors);
