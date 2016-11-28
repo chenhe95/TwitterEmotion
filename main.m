@@ -12,7 +12,7 @@ errors = zeros(K, 1);
 cv_10f_indices = crossvalind('Kfold', n_examples, K);
 
 labels = Y;
-word_counts_processed = full((X));
+word_counts_processed = full(double(X ~= 0));
 
 % remove 0 cols
 word_counts_processed(:, ~any(word_counts_processed, 1)) = [];
