@@ -3,7 +3,7 @@ function save_models(file_name, models)
 BASE_DIR = fullfile('models');
 BACKUP_DIR = fullfile('models', 'backup');
 
-file_name = [file_name '.mat']
+file_name = [file_name '.mat'];
 
 file_path = fullfile(BASE_DIR, file_name);
 
