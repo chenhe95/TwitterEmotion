@@ -9,13 +9,11 @@ function [Y_hat] = predict_labels(word_counts, cnn_feat, prob_feat, color_feat, 
 %           raw_tweets      nx1 cells containing all the raw tweets in text
 % Outputs:  Y_hat           nx1 predicted labels (1 for joy, 0 for sad)
 
-n_examples = size(word_counts, 1);
-
 %% Load models
 load ./models.mat
 
 %% preprocess
-word_counts_processed = full(double(word_counts));
+word_counts_processed = full(double(word_counts ~= 0));
 word_counts_processed(:, c_removed) = [];
 %% Predict
 wc_out = predict(wc_model, word_counts_processed);
