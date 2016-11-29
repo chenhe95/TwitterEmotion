@@ -15,11 +15,8 @@ n_examples = size(word_counts, 1);
 load ./models.mat
 
 %% preprocess
-word_counts_processed = full(double(word_counts ~= 0));
-
-% remove 0 cols
+word_counts_processed = full(double(word_counts));
 word_counts_processed(:, c_removed) = [];
-
 %% Predict
 wc_out = predict(wc_model, word_counts_processed);
 %cnn_out = predict(cnn_model, cnn_feat);
