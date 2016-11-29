@@ -15,7 +15,8 @@ labels = Y;
 word_counts_processed = full(double(X ~= 0));
 
 % remove 0 cols
-word_counts_processed(:, ~any(word_counts_processed, 1)) = [];
+c_removed = find(~any(word_counts_processed, 1));
+word_counts_processed(:, c_removed) = [];
 
 for i = 1:K
     indices_train = find(cv_10f_indices ~= i);
@@ -62,3 +63,8 @@ for i = 1:K
 end
 
 error = mean(errors);
+
+% Date included for record. predict() will look for models.mat
+d = datetime;
+%save(['models-' datestr(d) '.mat'], 'wc_model', 'cnn_model', 'prob_model', 'color_model', 'wc_acc', 'cnn_acc', 'color_acc', 'prob_acc', 'c_removed');
+save(['models-' datestr(d) '.mat'], 'wc_model', 'c_removed');

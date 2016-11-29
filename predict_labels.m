@@ -11,5 +11,30 @@ function [Y_hat] = predict_labels(word_counts, cnn_feat, prob_feat, color_feat, 
 
 n_examples = size(word_counts, 1);
 
+%% Load models
+load ./models.mat
+
+%% preprocess
+word_counts = full(word_counts);
+word_counts(:, c_removed) = [];
+
+word_counts_processed = full(double(word_counts ~= 0));
+
+% remove 0 cols
+word_counts_processed(:, ~any(word_counts_processed, 1)) = [];
+
+%% Predict
+wc_out = predict(wc_model, word_counts_processed);
+%cnn_out = predict(cnn_model, cnn_feat);
+%color_out = predict(color_model, color_feat);
+%prob_out = predict(prob_model, prob_feat);
+
+%total_acc = wc_acc + cnn_acc + color_acc + prob_acc;
+
+%Y_hat = (wc_acc * wc_out + cnn_acc * cnn_out + ...
+%    color_acc * color_out + prob_acc * prob_out) / total_acc; 
+%Y_hat = double(Y_hat >= 0.5);
+
+Y_hat = wc_out;
 
 end
