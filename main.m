@@ -64,9 +64,9 @@ word_counts_processed(:, c_removed) = [];
 % 
 % error = mean(errors);
 
-wc_model = fitNaiveBayes(word_counts_processed, labels, 'Distribution', 'mn');
+wc_model = fitcnb(word_counts_processed, labels, 'Distribution', 'mn');
 
 % Date included for record. predict() will look for models.mat
 d = datetime;
 %save(['models-' datestr(d) '.mat'], 'wc_model', 'cnn_model', 'prob_model', 'color_model', 'wc_acc', 'cnn_acc', 'color_acc', 'prob_acc', 'c_removed');
-save(['models-' datestr(d) '.mat'], 'wc_model', 'c_removed');
+save(['models' '.mat'], 'wc_model', 'c_removed');
