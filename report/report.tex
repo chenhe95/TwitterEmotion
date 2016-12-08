@@ -1,24 +1,60 @@
 \documentclass[11pt,twocolumn]{report}
+\usepackage{graphicx}
+\usepackage{a4wide}
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\graphicspath{ {images/} }
 
 \author{He Chen, Henri Maxime Demoulin, Gabrielle De Micheli}
 \title{CIS520 Final Project Report}
 
 \begin{document}
 \maketitle
-
-\section{Methods Accuracy Report}
+\section*{Methods Accuracy Report}
     % Results for each method you tried (try to use checkpoints to get test set accuracy for each of your methods)
+	First, let us mention that when we write training error, we refer to our training error after cross-validation. When we write test error, we refer to the leaderboard.\\
+    
+    Firstly, let us explain some preprocessing ideas for the words. We start by deleting all the English, French and Spanish stop words and the words containing only one character (usually ponctuation). We also delete all the words that start with $\backslash u$. This corresponds to unicode. Finally, we try to remove the http and rt (note that we have a slightly smaller accuracy when we add the French and Spanish stop words and deleted the http and rt).  Another preprocessing idea was to iterate the words to appear only once in the entire dataset. However, this method wasn't very conclusive. The final error is $0.0967$.
+    
+    \subsection*{Generative Methods}
+    \subsubsection{Naive Bayes}
+    We start by using Naive Bayes only on the words. This method gave us around $80 \%$ of test-accuracy on the words without preprocessing. If we do the preprocessing described above, the accuracy rises to $81.42\%$. In order for Naive Bayes to work, we got rid of all the words that do not appear in any tweets because Naive Bayes assumes conditional independence. In order to use a variation of the bag of word model, the words are set to 1 if they appear in a tweet and zero otherwise. We also test Naive Bayes with all four datasets using the bag of words model.  
+   
+   
+    
+    \subsection*{Discriminative Methods}
+     \subsubsection{Random Forest}
+     We tried random forest only on the words but we observed the following: with 20 trees, we had a training error of 0.2167 and with 100 trees a training error of 0.2116. We use the same preprocessing process that with Naive Bayes.  
+    \subsubsection{SVM}
+    
+    If we use SVM with an RBF (Radial Basis Function) kernel function, we have a training error of 0.3813. Without RBF, the training error is 0.26. The linear kernel is twice as accurate as the RBF function. However, if we use RBF but this time without the word-count, we have a training error of 0.3776, which is greater than the error obtained with the two previous combinations we tried. If we try to use SVM without the word-count and without RBF, the training erro is 0.2626. We also try SVM only on words, and notice that it performs better than KNN.
+    
+    \subsubsection*{Perceptron}
+    
+    \subsection*{Instance based Methods}
+    \subsubsection{KNN}
+    
+    We use KNN on all four datasets and get a traning error of 0.3556.
+   
+    \subsection*{Regularization Method}
+    our own regularization method other that the standard $L_i$ penalty....
+    \subsection*{Semi-supervised dimensionality reduction}
+    \subsubsection*{PCA}
+    We tried using PCA on the word dataset ?
 
-    \subsection{Generative Methods}
-    \subsection{Discriminative Methods}
-    \subsection{Instance based Methods}
-    \subsection{Regularization Method}
-    \subsection{Semi-supervised dimmensionality reduction}
-
-\section{Methods Analysis}
+\section *{Methods Analysis}
     % Analysis of your experiments. What worked and what didn’t work? Why not? What did you do to try to fix it? Simply saying “I tried XX and it didn’t work” is not enough.
 
-\section{Visualization}
+\section*{Visualization}
     % An interesting visualization of one of your models. For instance, find the words that most correlate with the outcome. 
+    We consider the well-classified words and we want to find which words are the most important. In order to visualize this, we compute a word cloud. 
+    
+%    \begin{center}
+%    \includegraphics{}{}
+%    \end{center}
+%    
 
 \end{document}
+
