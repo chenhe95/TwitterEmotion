@@ -44,7 +44,7 @@ for i = 1:K
     labels_test = labels(indices_test, :);
 
     %% DISCRIMINATIVE: NB ON WORDS
-    wc_model = fitcsvm(word_counts_train, labels_train);
+    wc_model = fitcnb(word_counts_train, labels_train, 'Distribution', 'mn');
     wc_out = predict(wc_model, word_counts_test);
     wc_acc = 1 / sum(labels_test ~= wc_out);
 
