@@ -30,7 +30,7 @@
     
      \subsubsection{Random Forest}
      "We tried random forest only on the words but we observed the following: with 20 trees, we had a training error of 0.2167 and with 100 trees a training error of 0.2116. We use the same preprocessing process that with Naive Bayes".(DELETE MAYBE)\\
-     For 100 trees, the error is 0.0533. For 500 trees, we get 0.0520 and for 1000 trees, we get 0.0509.
+     For 100 trees, the error is 0.0533. For 500 trees, we get 0.0520 and for 1000 trees, we get 0.0509. For the last case, the accuracy is of 0.7776.
     \subsubsection{SVM}
     
     If we use SVM with an RBF (Radial Basis Function) kernel function, we have a training error of 0.3813. Without RBF, the training error is 0.26. The linear kernel is twice as accurate as the RBF function. However, if we use RBF but this time without the word-count, we have a training error of 0.3776, which is greater than the error obtained with the two previous combinations we tried. If we try to use SVM without the word-count and without RBF, the training error is 0.2626. We also try SVM only on words, and notice that it performs better than KNN.
