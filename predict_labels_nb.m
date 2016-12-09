@@ -1,4 +1,4 @@
-function [Y_hat] = predict_labels_nb(word_counts, cnn_feat, prob_feat, color_feat, raw_imgs, raw_tweets)
+function [Y_hat] = predict_labels(word_counts, cnn_feat, prob_feat, color_feat, raw_imgs, raw_tweets)
 % Inputs:   word_counts     nx10000 word counts features
 %           cnn_feat        nx4096 Penultimate layer of Convolutional
 %                               Neural Network features
@@ -8,8 +8,18 @@ function [Y_hat] = predict_labels_nb(word_counts, cnn_feat, prob_feat, color_fea
 %           raw_imgs        nx30000 raw images pixels
 %           raw_tweets      nx1 cells containing all the raw tweets in text
 % Outputs:  Y_hat           nx1 predicted labels (1 for joy, 0 for sad)
-% predict_labels using a Naive Bayes classifier
 
-n_examples = size(word_counts, 1);
+%% Load models
+load ./models_nb.mat
+
+%% preprocess
+word_counts_processed = full(double(word_counts ~= 0));
+
+word_counts_processed(:, preprocess) = [];
+word_counts_processed(:, c_removed) = [];
+
+%% Predict
+wc_out = predict(wc_model, word_counts_processed);
+Y_hat = full(wc_out);
 
 end
