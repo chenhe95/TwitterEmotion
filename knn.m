@@ -4,8 +4,6 @@ load('train_set/train_color.mat');
 load('train_set/train_img_prob.mat');
 load('train_set/raw_tweets_train.mat');
 
-addpath('./DL_toolbox/util','./DL_toolbox/NN','./DL_toolbox/DBN');
-
 n_examples = size(X, 1);
 
 % indices for 10f cross validation
