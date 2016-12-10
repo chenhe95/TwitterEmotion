@@ -1,0 +1,43 @@
+Prereq:
+
+We include the liblinear and lightspeed toolboxes in our path.
+
+file: startup.m
+
+Word pre-processing:
+
+We remove English, French and Spanish stop words. We found some lists on the web:
+- english: http://www.textfixer.com/resources/common-english-words.txt
+- spanish/french: http://www.ranks.nl/stopwords/
+
+We remove 'http://' and 'rt'. We also remove one-characters word, as well as unicode. Finally, we change the word dataset in a 0/1 matrix indicating the absence/presence of a word.
+
+Files: common-english-words.txt, common-spanish-words.tx, common-french-words.txt, find_top.py, 
+
+
+Description of the four models:
+
+1). Generative: Naïve Bayes
+2). Discriminative:  Random Forest
+3). Instance based method: KNN
+4). Semi-supervised learning: PCA then SVM
+
+
+1). We trained Naïve Bayes on the words. This method gave us an accuracy of 80% without pre-processing the words.  Pre-processing allows the accuracy to rise to 81.42% on the leaderboard.
+
+files: nb.m, predict_labels_nb.m, models_nb.mat
+
+2). We trained random forest on the words and 77.76% test accuracy on the leaderboard.
+
+We note, supported by http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm, that we don't use cross validation for training random forests:
+"In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally, during the run, as follows: Each tree is constructed using a different bootstrap sample from the original data. About one-third of the cases are left out of the bootstrap sample and not used in the construction of the kth tree."
+
+files: random_forest.m, predict_labels_random_forest.m, models_random_forest.mat
+
+3).  Using KNN, we get a cross-validation error of 40.78%.
+
+files: knn.m, predict_labels_knn.m, models_knn.mat
+
+4).  We use PCA on the words, then perform SVM. We get a 22.87% cross validation error.
+
+files: svm_pca.m, predict_labels_svm_pca.m, models_svm_pca.mat
