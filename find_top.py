@@ -3,6 +3,7 @@
 stopwords_en = 'common-english-words.txt'
 stopwords_fr = 'common-french-words.txt'
 stopwords_es = 'common-spanish-words.txt'
+useless = 'useless'
 topwords = 'topwords.csv'
 
 stop_words = []
@@ -13,6 +14,7 @@ unic  = []
 http  = []
 indexes = []
 rt = []
+digit = []
 
 f = open(stopwords_en, 'r')
 for line in f.readlines():
@@ -35,24 +37,33 @@ for line in f.readlines():
 
 f.close()
 
+f = open(useless, 'r')
+for line in f.readlines():
+    line = line.rstrip('\r\n')
+    stop_words.append(line)
+
+f.close()
+
 f = open(topwords, 'r')
 for line in f.readlines():
     line = line.rstrip('\r\n')
     top_words.append(line)
 
+    unisub = '\u'
+    httpsub = 'http'
+
     if len(line) == 1:
         small.append(top_words.index(line) + 1)
-
-    unisub = '\u'
-    if unisub in line:
+    elif unisub in line:
         unic.append(top_words.index(line) + 1)
-
-    httpsub = 'http'
-    if httpsub in line:
+    elif httpsub in line:
         http.append(top_words.index(line) + 1)
-
-    if line == 'rt':
+    elif line == 'rt':
         rt.append(top_words.index(line) + 1)
+    elif line.isdigit():
+        digit.append(top_words.index(line) + 1)
+    else:
+        print line
 
 f.close()
 
@@ -68,9 +79,9 @@ print 'word that has only 1 characters: ' + str(small)
 print 'unicode words: ' + str(unic)
 """
 
-merged = sorted(set(indexes + small + unic + rt))
+merged = sorted(set(indexes + small + unic + http + rt + digit))
 
-#print 'all of them: ' + str(merged)
+print 'all of them: ' + str(merged)
 
 """
 # Get indexes of word that stays in the training set
