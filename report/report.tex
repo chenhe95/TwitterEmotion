@@ -14,26 +14,28 @@
 \maketitle
 \section*{Methods Accuracy Report}
     % Results for each method you tried (try to use checkpoints to get test set accuracy for each of your methods)
-	First, let us mention that when we write training error, we refer to our training error after cross-validation. When we write test error, we refer to the leaderboard.\\
-    
-    Firstly, let us explain some preprocessing ideas for the words. We start by deleting all the English, French and Spanish stop words and the words containing only one character (usually ponctuation). We also delete all the words that start with $\backslash u$. This corresponds to unicode. Finally, we try to remove the http and rt (note that we have a slightly smaller accuracy when we add the French and Spanish stop words and deleted the http and rt).  Another preprocessing idea was to iterate the words to appear only once in the entire dataset. However, this method wasn't very conclusive. The final error is $0.0967$.
+    First, let us explain some of the preprocessing steps that we have taken.
+    For the word count preprocessing, we deleted all the English, French, and Spanish common stop words, words containing only one character (punctuation?), unicode words starting with $\backslash u$, and words that are http and rt links. All of these preprocessing steps were tested one by one to confirm that it indeed does increase the cross validation accuracy. 
+
+	Another thing that we have done to try and see which words are good to delete in the preprocessing was iterating through all 10,000 of the word columns, and if deleting that column yielded significantly better cross validation accuracy (1.5 percent of better), then we deleted that column in the preprocessing step. However, that did not work and we ended up with more cross validation error (2-3 percent) than we started with.
     
     \subsection*{Generative Methods}
     \subsubsection{Naive Bayes}
-    We start by using Naive Bayes only on the words. This method gave us around $80 \%$ of test-accuracy on the words without preprocessing. If we do the preprocessing described above, the accuracy rises to $81.42\%$. In order for Naive Bayes to work, we got rid of all the words that do not appear in any tweets because Naive Bayes assumes conditional independence. In order to use a variation of the bag of word model, the words are set to 1 if they appear in a tweet and zero otherwise. We also test Naive Bayes with all four datasets using the bag of words model.  
-   
+    We start by using Naive Bayes only on the words. This method gave us around $80 \%$ testing accuracy on the words without preprocessing. If we do the preprocessing described above, the testing accuracy rises to $81.42\%$. In order for Naive Bayes to work, we got rid of all the words that do not appear in any tweets, since $fitncb()$ had issues dealing with words of probability $0$. In order to use a variation of the bag of word model, the words are set to 1 if they appear in a tweet and zero otherwise.
+    We have also tried and tested $\log(w_i + 1)$ and $\sqrt(w)$, but doing that made the accuracy of Naive Bayes go bad $(22-35)$ percent error. So we concluded that the best way was simply checking if the word exists or doesn't exist (0 or 1). 
+	From our experience, Naive Bayes is both extremely accurate and extremely fast when used on the word counts.   
    
     
     \subsection*{Discriminative Methods}
     \subsubsection{Linear Regression}
-    
+    We tried many variants of linear regression on the CNN features. We tried with L1 regularization, L2 regularization, and elastic net. However, even the best (L2) was barely at 67% test accuracy, and when combined with the bag of words Naive Bayes, netted 79-80% cross validation accuracy. Therefore, while we did try things with linear regression, we were not successful in making it good enough to actually use. 
     
      \subsubsection{Random Forest}
-     "We tried random forest only on the words but we observed the following: with 20 trees, we had a training error of 0.2167 and with 100 trees a training error of 0.2116. We use the same preprocessing process that with Naive Bayes".(DELETE MAYBE)\\
-     For 100 trees, the error is 0.0533. For 500 trees, we get 0.0520 and for 1000 trees, we get 0.0509. For the last case, the accuracy is of 0.7776.
+     "We tried random forest only on the words but we observed the following: with 20 trees, we had a cross validation error of 0.2167 and with 100 trees a cross validation error of 0.2116. We use the same preprocessing process that with Naive Bayes".(DELETE MAYBE)\\
+     For 100 trees, the cross validation error is 0.0533. For 500 trees, we get cross validation error of 0.0520 and for 1000 trees, we get a cross validation error of 0.0509. For the last case, the cross validation accuracy is 0.7776.
     \subsubsection{SVM}
     
-    If we use SVM with an RBF (Radial Basis Function) kernel function, we have a training error of 0.3813. Without RBF, the training error is 0.26. The linear kernel is twice as accurate as the RBF function. However, if we use RBF but this time without the word-count, we have a training error of 0.3776, which is greater than the error obtained with the two previous combinations we tried. If we try to use SVM without the word-count and without RBF, the training error is 0.2626. We also try SVM only on words, and notice that it performs better than KNN.
+    If we use SVM with an RBF (Radial Basis Function) kernel function, we have a cross validation error of 0.3813. Without RBF, the cross validation error is 0.26. The linear kernel is twice as accurate as the RBF function. However, if we use RBF but this time without the word-count, we have a cross validation error of 0.3776, which is greater than the error obtained with the two previous combinations we tried. If we try to use SVM without the word-count and without RBF, the cross validation error is 0.2626. We also try SVM only on words, and notice that it performs better than KNN.
     
     \subsubsection*{Perceptron}
     TO DO
@@ -47,10 +49,10 @@
     TO DO
     \subsection*{Semi-supervised dimensionality reduction}
     \subsubsection*{PCA}
-    We try using PCA on the \textit{image dataset}. First, we use PCA with all the PCs combined with SVM which gives a training error of 0.0324. We do the same again but only with 1000 PCs. This gives an error of 0.1198. Moreover, using 570 PCs (corresponding to 50MB), we get a training error of 0.1509.\\
+    We try using PCA on the \textit{image dataset}. First, we use PCA with all the PCs combined with SVM which gives a cross validation error of 0.0324. We do the same again but only with 1000 PCs. This gives an error of 0.1198. Moreover, using 570 PCs (corresponding to 50MB), we get a cross validation error of 0.1509.\\
     
     
-   On the \textit{word dataset}, we also try using PCA with various numbers of PCs (all, 500 ...) and this time, combined with random forest. This gives a training error of 0.0064. The test-accuracy is 0.7491.\\
+   On the \textit{word dataset}, we also try using PCA with various numbers of PCs (all, 500 ...) and this time, combined with random forest. This gives a cross validation error of 0.0064. The test-accuracy is 0.7491.\\
     
     
 
