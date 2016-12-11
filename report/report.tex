@@ -28,7 +28,9 @@
     
     \subsection*{Discriminative Methods}
     \subsubsection{Linear Regression}
-    We tried many variants of linear regression on the CNN features. We tried with L1 regularization, L2 regularization, and elastic net. However, even the best (L2) was barely at 67% test accuracy, and when combined with the bag of words Naive Bayes, netted 79-80% cross validation accuracy. Therefore, while we did try things with linear regression, we were not successful in making it good enough to actually use. 
+	We primarily did linear regression on only the CNN features. For each of the linear regression methods we have tried, we have tried it on the raw CNN features, the CNN features max pooled to various degrees, and the CNN features mean pooled to various degrees.    
+    At first we tried elastic net regression, which got around 65 percent cross validation accuracy give or take 3 percent for all of the different pooling methods. Then we tried L1 regression, which got pretty identical results as elastic net. Then we tried L2 regression which was slightly better than elastic net and L1, with about 68 percent cross validation accuracy. 
+    In all 3 of these regression methods, we were not able to get much better than 68 percent cross validation accuracy, which combined with the bag of words Naive Bayes, resulted in a 78-80 percent cross validation accuracy. Our conclusion was that linear regression was not appropriate for the CNN features, and so we did not incorporate linear regression in our leaderboards model. 
     
      \subsubsection{Random Forest}
      "We tried random forest only on the words but we observed the following: with 20 trees, we had a cross validation error of 0.2167 and with 100 trees a cross validation error of 0.2116. We use the same preprocessing process that with Naive Bayes".(DELETE MAYBE)\\
