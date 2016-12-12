@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage{amsmath}
+\usepackage{url}
 \graphicspath{ {images/} }
 
 \author{He Chen, Henri Maxime Demoulin, Gabrielle De Micheli}
@@ -17,7 +18,7 @@
 
 \section*{Methods Accuracy Report}
     % Results for each method you tried (try to use checkpoints to get test set accuracy for each of your methods)
-    First, let us explain the preprocessing steps that we have taken, in order to purify the features from low value words. We did delete all the English, French, and Spanish common stop words \ref{stopwords}, words containing only one character, unicode words, words such as ``http'' and ``rt'', and a bunch of symbols not bearing emotions, such as ``-->'' or ``\_\_''. We tested multiple combinations of features removals, and observed that trimming too many "non emotional symbols", such as the ones we mentionned before, was not beneficial in terms of cross-validation error, nor in testing error on the leaderboard. We suppose that this is due to the correlation between such symbols and the other words in the text.
+    First, let us explain the preprocessing steps that we have taken, in order to purify the features from low value words. We did delete all the English, French, and Spanish common stop words \cite{stopwords}, words containing only one character, unicode words, words such as ``http'' and ``rt'', and a bunch of symbols not bearing emotions, such as ``--$>$'' or ``\_\_''. We tested multiple combinations of features removals, and observed that trimming too many "non emotional symbols", such as the ones we mentionned before, was not beneficial in terms of cross-validation error, nor in testing error on the leaderboard. We suppose that this is due to the correlation between such symbols and the other words in the text.
     \par
 	Another thing that we have done, in order to check for words worth deletion, was to iterate through all $10,000$ of the word columns, and if deleting a column yielded significantly better cross validation accuracy ($1.5$ percent or better), then we deleted that column in the preprocessing step. However, the results where not as good as expected, and we ended up with a higher cross-validation error ($2$-$3$ percents) than we started with.
     
@@ -35,7 +36,7 @@
     In all 3 of these regression methods, we were not able to get much better than $68$ percent cross-validation accuracy, which combined with the bag of words Naive Bayes, resulted in a $78-80$ percent cross-validation accuracy. Our conclusion was that linear regression was not appropriate for the CNN features, and so we did not incorporate it in our leaderboard model. 
     
      \subsubsection{Random Forest}
-     We tried random forest on the words only but we observed the following: with $20$ trees, cross-validation error was $0.2167$, while with $100$ trees it was $0.2116$. Cross-validation error stayed stable with $500$ and $1000$ trees, which is consistent with previous reports of random forest accuracy, where the model tends to overfit past the hundreds trees, without yielding much gain in accuracy \ref{latinne2001limiting,oshiro2012many}. We note that we used the same pre-processing steps we took with Naive Bayes.
+     We tried random forest on the words only but we observed the following: with $20$ trees, cross-validation error was $0.2167$, while with $100$ trees it was $0.2116$. Cross-validation error stayed stable with $500$ and $1000$ trees, which is consistent with previous reports of random forest accuracy, where the model tends to overfit past the hundreds trees, without yielding much gain in accuracy \cite{latinne2001limiting,oshiro2012many}. We note that we used the same pre-processing steps we took with Naive Bayes.
 
     \subsubsection{SVM}
     Using SVM with an RBF (Radial Basis Function) kernel function, results in a cross-validation error of $0.3813$. With a linear kernel, the cross validation error is $0.26$. However, we note that using RBF with the full wordcount (in lieu of the binary presence/absence indicator), we have a cross validation error of $0.3776$. Using the linear kernel with the full wordcount yields a cross-validation error of $0.2626$.
@@ -67,7 +68,7 @@
     \includegraphics[scale=0.45]{cloud}
     \end{center}
 
-    \bibliographystyle{abbrv}
-    \bibliography{report}
+\bibliographystyle{abbrv}
+\bibliography{report}
 
 \end{document}
