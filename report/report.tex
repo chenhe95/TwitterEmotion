@@ -48,7 +48,7 @@
    
     \subsection*{Semi-supervised methods}
     \subsubsection*{PCA}
-    We used PCA on both image (scene/object probabilities) and words. On the words, PCA with all the PCs combined with SVM gives a cross-validation error of $0.0324$, while 1000 PCs yields an error of $0.1198$, and $570$ PCs, the threshold where the model grows past $50$MB, yields a testing error of $xx$ on the leaderboard.
+    We used PCA on both image (scene/object probabilities) and words. On the words, PCA with all the PCs combined with SVM gives a cross-validation error of $0.0324$, while 1000 PCs yields an error of $0.1198$, and $570$ PCs, the threshold where the model grows past $50$MB, yields an accuracy of $0.7907$ on the leaderboard.
     \par
    On the words, we also try using PCA with various numbers of PCs (all, 500, 1000, ...) and this time, used the PCAed features with Random Forests. With $570$ PC, the limit above which the model was larger than $50$MB, the test-accuracy was 0.7491.\\
 
