@@ -33,7 +33,7 @@
     \subsection*{Discriminative Methods}
 
     \subsubsection{Linear Regression}
-	We primarily did Linear Regression on the CNN features only. We tried it on the raw CNN features, the CNN features max pooled to various degrees, and the CNN features mean pooled to various degrees. At first we tried Elastic Net regression, which got around $65$ percent cross-validation accuracy, give or take $3$ percent for all of the different pooling methods. Then we tried $L1$ regression, which got pretty identical results as Elastic Net. Then we tried $L2$ regression which was slightly better than Elastic Net and $L1$, with about $68$ percent cross-validation accuracy. 
+	We primarily did Linear Regression on the CNN features only. We tried it on the raw CNN features, the CNN features max pooled to various degrees, and the CNN features mean pooled to various degrees. At first we tried Elastic Net regression, which got around $65$ percent cross-validation accuracy, give or take $3$ percent for all of the different pooling methods. Then we tried $L1$ regression, which got pretty identical results as Elastic Net. Then we tried $L2$ regression which was slightly better than Elastic Net and $L1$, with about $68$ percent cross-validation accuracy.
     \par
     In all 3 of these regression methods, we were not able to get much better than $68$ percent cross-validation accuracy, which combined with the bag of words Naive Bayes, resulted in a $78-80$ percent cross-validation accuracy. Our conclusion was that linear regression was not appropriate for the CNN features, and so we did not incorporate it in our leaderboard model. 
     
@@ -41,7 +41,7 @@
      We tried random forest on the words only and observed the following: with $20$ trees, cross-validation error was $0.2167$, while with $100$ trees it was $0.2116$. Cross-validation error stayed stable with $500$ and $1000$ trees, which is consistent with previous reports of random forest accuracy, where the model tends to overfit past the hundreds trees, without yielding much gain in accuracy \cite{latinne2001limiting,oshiro2012many}. We note that we used the same pre-processing steps we took with Naive Bayes.
 
     \subsubsection{SVM}
-    Using SVM with an RBF (Radial Basis Function) kernel function, results in a cross-validation error of $0.3813$. With a linear kernel, the cross validation error is $0.26$. However, we note that using RBF with the full wordcount (in lieu of the binary presence/absence indicator), we have a cross validation error of $0.3776$. Using the linear kernel with the full wordcount yields a cross-validation error of $0.2626$.
+    Using SVM with an RBF (Radial Basis Function) kernel function, results in a cross-validation error of $0.3813$. With a linear kernel, the cross-validation error is $0.26$. However, we note that using RBF with the full wordcount (in lieu of the binary presence/absence indicator), we have a cross validation error of $0.3776$. Using the linear kernel with the full wordcount yields a cross-validation error of $0.2626$.
     
     \subsection*{Instance based Methods}
     \subsubsection{KNN}
@@ -50,26 +50,31 @@
    
     \subsection*{Semi-supervised methods}
     \subsubsection*{PCA}
-    We used PCA on both image (scene/object probabilities) and words. On the words, PCA with all the PCs combined with SVM gives a cross-validation error of $0.0324$, while 1000 PCs yields an error of $0.1198$, and $570$ PCs, the threshold where the model grows past $50$MB, yields an accuracy of $0.7907$ on the leaderboard.
-    \par
-   On the words, we also try using PCA with various numbers of PCs (all, 500, 1000, ...) and this time, used the PCAed features with Random Forests. With $570$ PC, the limit above which the model was larger than $50$MB, the test-accuracy was 0.7491.\\
+    On the words, we tried PCA combined with SVM. With $570$ PCs, the threshold where the model grows past $50$MB, we got an accuracy of $0.7907$ on the leaderboard. Again on the words, and with that same number of PC ($570$), we used the PCAed features with Random Forests and got a test accuracy of $0.7491$.
 
 \section *{Methods Analysis}
     % Analysis of your experiments. What worked and what didn’t work? Why not? What did you do to try to fix it? Simply saying “I tried XX and it didn’t work” is not enough.
 
-    - We tried SVM only on words, and notice that it performs better than KNN but worse than NB \\
-    - From our experience, Naive Bayes is both very accurate and extremely fast when used on the word counts. \\
-    - Our conclusion was that linear regression was not appropriate for the CNN features, and so we did not incorporate it in our leaderboard model. \\
-    - Random forest performs almost as well as NB \\
-    - PCA \& RF performed worse than NB \\
-    - PCA \& SVM performed 
+    Our first method, Naive Bayes, performed very well with the words, having extremely high velocity and also good accuracy. We think that this method fit very well with the data we have, partly because Naive Bayes performs better when examples are few, since it converges quickly. Also, we notice that Naive Bayes did not work very well with the images: this method is not supposed to work well with real values, and as we modified the structure of the features to force it to run (by setting the highest features to 1, and the other to 0, effectively discretizing the entire matrix), we were not surprised by the low accuracy.
+    \par
+    KNN performed globally very badly. The reason is very likely that our dataset is high dimmensional, not really linearly separable, and KNN suffers from the curse of dimmensionality.
+    \par
+    We used Linear Regression various pre-processing of the CNN features, extensively experimenting max and mean pooling, as well as general feature scaling. We got poor results pretty much all the time, and got the suspicion that the set of images we were given are generally not helpful for telling appart joy and sadness. We concluded that Linear Regression was not appropriate for the CNN features, and did not incorporate it in our leaderboard model.
+    \par
+    Random Forest did perform quite well, one reason being that the structure of our data (many more features than observations) fits well with this method. Also, our understanding is that, as a mixture model, and as we have only two classes, the model is doing a very good job at capturing various flavor of joy and sadness. In the end, Random Forest did perform almost as good as Naive Bayes, but because it ended up being much more slower to compute and that the testing error was not quite as good as Naive Bayes, we chose the later.
+    \par
+    We tried SVM only on the words, and notice that it performed better than KNN but worse than Naive Bayes. The reason is that SVM exploits higher dimmensionality better than KNN, but can't beat Naive Bayes on the kind of data we are dealing with, because of the nature of Naive Bayes itself. We note that the RBF kernel performed much worse than the linear one, because it makes the model non parametric (while the linear kernel makes it parametric), which is totally against the mechanics of SVM (which is totally parameterized by the support vectors).
+    \par
+    Lastly, we observe that using Random Forest on PCAed features was not significantly better than the native version, given the amount of PC we were able to use, but we suspect that our accuracy would have been much better with a higher number of PC, due to the fact that Random Forest is equally a good fit for the data (words) we have. We also notice that SVM on the PCAed features performed worse than Random Forest on the same data, and suspect that it has to do with the poor linear separability of the words.
+    \par
+    Overall, Ensemble methods (RF) performed much better than non boosted ones, expect for NB, because...
 
 \section*{Visualization}
     % An interesting visualization of one of your models. For instance, find the words that most correlate with the outcome.
-    In order to get a better sense of what words where most impactful during our classification, we consider the well-classified ones and use their count to create the word cloud bellow:
+    In order to get a better sense of what words where most impactful during our classification, we consider the well-classified ones and use their count to create the word cloud bellow. Sadly, the engine we used got rid of some popular characters, such as ``\ldots'' and smileys.
     
     \begin{center}
-    \includegraphics[scale=0.45]{cloud}
+        \includegraphics[scale=0.45]{cloud}
     \end{center}
 
 \bibliographystyle{abbrv}
