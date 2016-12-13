@@ -41,23 +41,23 @@
      We tried random forest on the words only and observed the following: with $20$ trees, cross-validation error was $0.2167$, while with $100$ trees it was $0.2116$. Cross-validation error stayed stable with $500$ and $1000$ trees, which is consistent with previous reports of random forest accuracy, where the model tends to overfit past the hundreds trees, without yielding much gain in accuracy \cite{latinne2001limiting,oshiro2012many}. We note that we used the same pre-processing steps we took with Naive Bayes.
 
     \subsubsection{SVM}
-    Using SVM with an RBF (Radial Basis Function) kernel function, results in a cross-validation error of $0.3813$. With a linear kernel, the cross-validation error is $0.26$. However, we note that using RBF with the full wordcount (in lieu of the binary presence/absence indicator), we have a cross validation error of $0.3776$. Using the linear kernel with the full wordcount yields a cross-validation error of $0.2626$.
+    Using SVM with an RBF (Radial Basis Function) kernel function, results in a cross-validation error of $0.3813$. With a linear kernel, the cross-validation error is $0.26$. However, we note that using RBF with the full word count (in lieu of the binary presence/absence indicator), we have a cross validation error of $0.3776$. Using the linear kernel with the full word count yields a cross-validation error of $0.2626$.
     
     \subsection*{Instance based Methods}
     \subsubsection{KNN}
     
-    We use KNN on all four datasets and get a cross-validation error of 40 percent (give or take 5) with K clusters, K being 1 to 20. We decided not to use KNN not only due to the low individual accuracy, but also due to the low overall accuracy (78 to 80 percent) when combined with the other methods. We suspsect that KNN is not very good for this kind of high dimensional classification because each point ended up being too far from the other points to make any good conclusions. 
+    We use KNN on all four datasets and get a cross-validation error of 40 percent (give or take 5) with K clusters, K being 1 to 20. We decided not to use KNN not only due to the low individual accuracy, but also due to the low overall accuracy (78 to 80 percent) when combined with the other methods. We suspect that KNN is not very good for this kind of high dimensional classification because each point ended up being too far from the other points to make any good conclusions. 
    
     \subsection*{Semi-supervised methods}
     \subsubsection*{PCA}
-    On the words, we tried PCA combined with SVM. With $570$ PCs, the threshold where the model grows past $50$MB, we got an accuracy of $0.7907$ on the leaderboard. Again on the words, and with that same number of PC ($570$), we used the PCAed features with Random Forests and got a test accuracy of $0.7491$.
+    On the words, we tried PCA combined with SVM. With $570$ PCs, the threshold where the model grows past $50$MB, we got an accuracy of $0.7907$ on the leaderboard. Again on the words, and with that same number of PC ($570$), we used the PCA features with Random Forests and got a test accuracy of $0.7491$.
 
 \section *{Methods Analysis}
     % Analysis of your experiments. What worked and what didn’t work? Why not? What did you do to try to fix it? Simply saying “I tried XX and it didn’t work” is not enough.
 
     Our first method, Naive Bayes, performed very well with the words, having extremely high velocity and also good accuracy. We think that this method fit very well with the data we have, partly because Naive Bayes performs better when examples are few, since it converges quickly. Also, we notice that Naive Bayes did not work very well with the images: this method is not supposed to work well with real values, and as we modified the structure of the features to force it to run (by setting the highest features to 1, and the other to 0, effectively discretizing the entire matrix), we were not surprised by the low accuracy.
     \par
-    KNN performed globally very badly. The reason is very likely that our dataset is high dimmensional, not really linearly separable, and KNN suffers from the curse of dimmensionality.
+    KNN performed globally very badly. The reason is very likely that our dataset is high dimensional, not really linearly separable, and KNN suffers from the curse of high dimensionality.
     \par
     We used Linear Regression various pre-processing of the CNN features, extensively experimenting max and mean pooling, as well as general feature scaling. We got poor results pretty much all the time, and got the suspicion that the set of images we were given are generally not helpful for telling appart joy and sadness. We concluded that Linear Regression was not appropriate for the CNN features, and did not incorporate it in our leaderboard model.
     \par
@@ -65,9 +65,9 @@
     \par
     We tried SVM only on the words, and notice that it performed better than KNN but worse than Naive Bayes. The reason is that SVM exploits higher dimmensionality better than KNN, but can't beat Naive Bayes on the kind of data we are dealing with, because of the nature of Naive Bayes itself. We note that the RBF kernel performed much worse than the linear one, because it makes the model non parametric (while the linear kernel makes it parametric), which is totally against the mechanics of SVM (which is totally parameterized by the support vectors).
     \par
-    Lastly, we observe that using Random Forest on PCAed features was not significantly better than the native version, given the amount of PC we were able to use, but we suspect that our accuracy would have been much better with a higher number of PC, due to the fact that Random Forest is equally a good fit for the data (words) we have. We also notice that SVM on the PCAed features performed worse than Random Forest on the same data, and suspect that it has to do with the poor linear separability of the words.
+    Lastly, we observe that using Random Forest on PCA features was not significantly better than the native version, given the amount of PC we were able to use, but we suspect that our accuracy would have been much better with a higher number of PC, due to the fact that Random Forest is equally a good fit for the data (words) we have. We also notice that SVM on the PCA features performed worse than Random Forest on the same data, and suspect that it has to do with the poor linear separability of the words.
     \par
-    Overall, Ensemble methods (RF) performed much better than non boosted ones, expect for NB, because...
+    Overall, Ensemble methods (RF) performed much better than non boosted ones, except for Naive Bayes, and the reason for that, we guess, is that Naive Bayes is simply very effective at this kind of categorical-bag-of-word classification with low number of examples (converges quickly). 
 
 \section*{Visualization}
     % An interesting visualization of one of your models. For instance, find the words that most correlate with the outcome.
