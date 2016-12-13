@@ -20,13 +20,15 @@
     % Results for each method you tried (try to use checkpoints to get test set accuracy for each of your methods)
     First, let us explain the pre-processing steps that we have taken, in order to purify the features from low value words. We did delete all the English, French, and Spanish common stop words \cite{stopwords}, words containing only one character, Unicode words, words such as ``http'' and ``rt'', and a bunch of symbols not bearing emotions, such as ``--$>$'' or ``\_\_''. We tested multiple combinations of features removals, and observed that trimming too many "non emotional symbols", such as the ones we mentioned before, was not beneficial in terms of cross-validation error, nor in testing error on the leaderboard. We suppose that this is due to the correlation between such symbols and the other words in the text.
     \par
-	Another thing that we have done, in order to check for words worth deletion, was to iterate through all $10,000$ of the word columns, and if deleting a column yielded significantly better cross validation accuracy ($1.5$ percent or better), then we deleted that column in the pre-processing step. However, the results where not as good as expected, and we ended up with a higher cross-validation error ($2$-$3$ percents) than we started with.
+	Another thing that we have done, in order to check for words worth deletion, was to iterate through all $10,000$ of the word columns, and if deleting a column yielded significantly better cross validation accuracy ($1.5$ percent or better), then we deleted that column in the pre-processing step. However, the results where not as good as expected, and we ended up with a higher cross-validation error ($2$-$3$ percents) than we started with, so we did not include this part in our final preprocessing. 
     
     \subsection*{Generative Methods}
     \subsubsection{Naive Bayes}
     We start by using Naive Bayes only on the words. This method gave us around $80 \%$ testing accuracy on the leaderboard, without pre-processing. Adding a combination of the pre-processing described above, the testing accuracy raised to $81.42\%$. In order for Naive Bayes to work, we got rid of all the words that do not appear in any tweets, since it assumes conditional independence and $fitncb()$ does not handle words of probability $0$. We use a variation of the bag of words model, where the word counts is set to 1 if a word appears in a tweet and zero otherwise.
     \par
     We have also tried and tested $\log(w_i + 1)$ and $\sqrt(w)$, but doing that made the accuracy of Naive Bayes go bad $(22-35)$ percent of cross-validation error. So we concluded that the best way was simply checking if the word exists or doesn't exist (0 or 1). From our experience, Naive Bayes is both very accurate and extremely fast when used on the word counts.   
+    \par
+    We have also tried using the probabilities of each scene. For each example, we have set the highest probability image to 1, and set each other probability to 0, so it essentially becomes a One-Hot representation. Then, we removed each scene that did not appear in any of the examples, and ran multinomial Naive Bayes on it. We obtained 65 percent cross validation accuracy, which combined with the multinomial Naive Bayes on word counts resulted in 80 percent cross validation accuracy. We were not pleased with these results and therefore did not use this. 
    
     \subsection*{Discriminative Methods}
 
@@ -44,7 +46,7 @@
     \subsection*{Instance based Methods}
     \subsubsection{KNN}
     
-    We use KNN on all four datasets and get a cross-validation error of $0.3556$ with ? clusters.
+    We use KNN on all four datasets and get a cross-validation error of 40 percent (give or take 5) with K clusters, K being 1 to 20. We decided not to use KNN not only due to the low individual accuracy, but also due to the low overall accuracy (78 to 80 percent) when combined with the other methods. We suspsect that KNN is not very good for this kind of high dimensional classification because each point ended up being too far from the other points to make any good conclusions. 
    
     \subsection*{Semi-supervised methods}
     \subsubsection*{PCA}
